@@ -1,3 +1,4 @@
+import { USER_ROLE } from './../user/constants/user.constants';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { User, UserRepository } from '@user';
@@ -8,7 +9,7 @@ import { UserAuthBody } from './types/body.types';
 
 class AuthService {
 
-  async login(userDTO: UserAuthBody): Promise<string> {
+  async login(userDTO: UserAuthBody): Promise<{token: string, role: USER_ROLE}> {
     const { name, password } = userDTO;
     const user: User | null = await UserRepository.findOneByName(name);
     if (!user) {
@@ -23,7 +24,10 @@ class AuthService {
       );
     }
     const token: string = this.getJtwToken(user.id, user.role);
-    return token;
+    return {
+      token,
+      role: user.role,
+    };
   }
 
   getJtwToken(id: number, role: string): string {

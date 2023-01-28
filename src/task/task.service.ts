@@ -18,9 +18,7 @@ export class TaskService {
       offset: pagination?.offset ? Number(pagination?.offset) : undefined,
       field: sort?.field ? sort?.field.toLowerCase() : undefined,
     };
-    const tasks: Task[] = await TaskRepository.getAllTasks( params);
-
-    const allTasks: Task[] = await TaskRepository.getAllTasks({ limit: undefined, offset: undefined, field: undefined } );
+    const [tasks, amount] = await TaskRepository.getAllTasks( params);
 
     if (!tasks.length) {
       throw new AppError(STATUS_CODE.NOT_FOUND,
@@ -28,8 +26,8 @@ export class TaskService {
       );
     }
     const allTaskResponse: GetAllTaskResponse = {
-      amount: allTasks.length,
-      tasks: tasks,
+      amount: amount,
+      todos: tasks,
     };
     return allTaskResponse;
   }
@@ -48,11 +46,6 @@ export class TaskService {
     if (!task) {
       throw new AppError(STATUS_CODE.NOT_FOUND,
         'Task not found',
-      );
-    }
-    if (updateBody.username === task.username) {
-      throw new AppError(STATUS_CODE.BAD_REQUEST,
-        'Name must be unique. Change name',
       );
     }
     const updatedTask: Task | null = await TaskRepository.updateTaskById(Number(id), updateBody);

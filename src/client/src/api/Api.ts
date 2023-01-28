@@ -1,3 +1,4 @@
+import { ITodoItem } from './../redux/interfaces';
 import fetch from './axios';
 import { ICreateTodos, IQuery, IUserLogin } from './interfaces';
 
@@ -30,8 +31,10 @@ export default class Api {
           });
     }
 
-    static async updateTodoById(){
-
+    static async updateTodoById(id: number, body: Partial<ITodoItem>, token: string){
+        return fetch.patch(`/task/${id}`, body, Api.setToken(token)).catch((error) => {
+            console.warn(error);
+          });
     }
 
     static async deleteTodoById() {

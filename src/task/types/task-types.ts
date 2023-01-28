@@ -8,5 +8,5 @@ export type QueryParams = {
 
 export type GetAllTaskResponse = {
   amount: number,
-  tasks: Task[]
+  todos: Task[]
 };

@@ -6,6 +6,7 @@ const initialState: AppState = {
   token: '',
   isLoading: false,
   isLogin: false,
+  isAdmin: false,
   todos: {
     todos: [],
     amount: 0
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload
     },
+    setUserRole: (state, action: PayloadAction<boolean>) => {
+      state.isAdmin = action.payload
+    },
     logOutUser: (state) => {
       state.token = initialState.token;
       state.isLoading = initialState.isLoading;
@@ -37,6 +41,6 @@ export const appSlice = createSlice({
   },
 })
 
-export const { loginUser, logOutUser,  setLoading, setTodos} = appSlice.actions
+export const { loginUser, logOutUser,  setLoading, setTodos, setUserRole} = appSlice.actions
 
 export default appSlice

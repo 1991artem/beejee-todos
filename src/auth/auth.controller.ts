@@ -7,9 +7,10 @@ export default class AuthController {
 
   static async login(req: LoginRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = await authService.login(req.body);
+      const {token, role} = await authService.login(req.body);
       res.status(STATUS_CODE.OK).json({
         token,
+        role,
       });
     } catch (error) {
       next(error);

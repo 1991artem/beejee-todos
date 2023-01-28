@@ -19,17 +19,19 @@ export class TaskRepository {
     return task;
   }
 
-  static async getAllTasks(params: QueryParams): Promise<Task[]> {
+  static async getAllTasks(params: QueryParams): Promise<[Task[], number]> {
     const { limit, offset, field } = params;
-    const tasks: Task[] = await this._tasksRepository.find({
-      skip: offset,
-      take: limit,
+    const tasks = await this._tasksRepository.findAndCount({
       order: field ?
         {
-          [field]: 'asc',
+          [field]: 'desc',
         }
         : undefined,
+      take: limit,
+      skip: offset,
+      cache: true,
     });
+
     return tasks;
   }
 
