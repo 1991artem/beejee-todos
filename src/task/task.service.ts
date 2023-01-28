@@ -7,7 +7,7 @@ import { CreateTaskBody, UpdateTaskBody } from './types/body.types';
 import { GetAllQueryParams } from './types/query.types';
 
 export class TaskService {
-  static async createTask(taskDTO: CreateTaskBody): Promise<Task> {
+  static createTask(taskDTO: CreateTaskBody): Promise<Task> {
     return TaskRepository.createTask(taskDTO);
   }
 
@@ -18,7 +18,9 @@ export class TaskService {
       offset: pagination?.offset ? Number(pagination?.offset) : undefined,
       field: sort?.field ? sort?.field.toLowerCase() : undefined,
     };
-    const tasks: Task[] = await TaskRepository.getAllTasks( params)
+    const tasks: Task[] = await TaskRepository.getAllTasks( params);
+
+    const allTasks: Task[] = await TaskRepository.getAllTasks({ limit: undefined, offset: undefined, field: undefined } );
 
     if (!tasks.length) {
       throw new AppError(STATUS_CODE.NOT_FOUND,
@@ -26,7 +28,7 @@ export class TaskService {
       );
     }
     const allTaskResponse: GetAllTaskResponse = {
-      amount: tasks.length,
+      amount: allTasks.length,
       tasks: tasks,
     };
     return allTaskResponse;

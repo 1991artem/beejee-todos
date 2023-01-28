@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import * as express from 'express';
 import { urlencoded, json } from 'express';
+import * as cors from 'cors';
 import { processNotFoundEndpoint, errorHandler } from '@middleware';
 import { mountRouter as mountAuthRouter } from '@auth';
 import { mountRouter as mountTaskRouter } from '@task';
@@ -9,6 +10,7 @@ import { AppDataSource } from './data-source';
 
 const app = express();
 
+app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: false }));
 mountAuthRouter(app);

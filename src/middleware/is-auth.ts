@@ -3,8 +3,8 @@ import { NextFunction, Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { IUserAuthInfoInRequest } from 'types/express';
 import { AppError } from 'errors/app.error';
-import { STATUS_CODE } from '../constants';
 import { config } from 'config';
+import { STATUS_CODE } from '../constants';
 
 export function isAuth(req: Request, _res: Response, next: NextFunction): void {
   const jwt_secret_key: string = config.DEV.JWT_SECRET;
@@ -19,7 +19,7 @@ export function isAuth(req: Request, _res: Response, next: NextFunction): void {
     }
 
     const [, token] = authHeader.split(' ');
-    
+
     const verifiedToken: IUserAuthInfoInRequest = jwt.verify(token, jwt_secret_key) as jwt.JwtPayload & IUserAuthInfoInRequest;
     req.user = verifiedToken;
     next();

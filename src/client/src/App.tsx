@@ -1,9 +1,17 @@
-import React from 'react';
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom';
+import Header from './modules/header';
+import { store } from './redux/store';
+import AppRouter from './router';
 
 function App() {
   return (
-    <div className="App">
-    </div>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <AppRouter />
+      </BrowserRouter>
+    </Provider>
   );
 }
 

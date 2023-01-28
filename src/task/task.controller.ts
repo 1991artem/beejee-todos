@@ -7,7 +7,6 @@ import { GetAllTaskResponse } from './types/task-types';
 export default class TaskController {
   static async createTask( req: CreateTaskRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      if (!req.user?.id) throw new Error();
       const task: Task = await TaskService.createTask(req.body);
       res.status(201).json( {
         id: task.id,
