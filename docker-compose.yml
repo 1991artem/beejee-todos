@@ -1,0 +1,14 @@
+volumes:
+  data:
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - 4200:4200
+    volumes:
+      - data:/var/lib/postgresql
+  myapp:
+    image: db1afda3d125bd527719b59c746727ad78b516ae01ce5aa588989181520fefc8

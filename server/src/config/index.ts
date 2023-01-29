@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
-import { DataSourceOptions } from 'typeorm';
 import { Task } from 'task/entity/task.entity';
+import { DataSourceOptions } from 'typeorm';
 import { User } from 'user/entity/user.entity';
 
 dotenv.config();
