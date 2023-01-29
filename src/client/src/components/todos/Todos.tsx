@@ -86,8 +86,8 @@ function Todos({ item }: ITodosCardProps) {
 
         return (
             <>
-                <Card.Header>{email}</Card.Header>
-                <Card.Header>{username}</Card.Header>
+                <Card.Header>Email: {email}</Card.Header>
+                <Card.Header>Name: {username}</Card.Header>
                 <Card.Body>
                     <Card.Text>
                         {description}
