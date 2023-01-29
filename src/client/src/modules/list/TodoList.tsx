@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Form, Pagination } from 'react-bootstrap';
+import { SORT } from '../../api/interfaces';
 import Todos from '../../components/todos/Todos';
 import { getAllTodosAction } from '../../redux/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -9,7 +10,7 @@ import './index.scss';
 
 function TodoList() {
     const [page, setPage] = useState(1)
-    const [sort, setSort] = useState(true)
+    const [sort, setSort] = useState(SORT.NAME)
     const data = useAppSelector((state: RootState) => state.app.todos);
     const dispatch = useAppDispatch();
 
@@ -24,15 +25,15 @@ function TodoList() {
         dispatch(getAllTodosAction({
             offset: params.offset,
             limit: params.limit,
-            sort: sort ? 'username' : 'email',
+            sort: sort,
         }))
-    }, [page, sort])
+    }, [page, sort, data])
 
     const { todos, amount } = data;
 
-    const pagesCount = Math.round(amount / 3);
+    const pagesCount = Math.ceil(amount / 3);
 
-    const sortFieldToggle = () => setSort(!sort);
+    const sortFieldToggle = (value: SORT) => setSort(value);
 
     const renderPagination = () => {
         let items = [];
@@ -57,8 +58,21 @@ function TodoList() {
             <Form>
                 <Form.Check
                     type="switch"
-                    label= {!sort ? "Sort by email" : "Sort by user name"}
-                    onChange={sortFieldToggle}
+                    label="Sort by email"
+                    checked={sort === SORT.EMAIL}
+                    onChange={() => sortFieldToggle(SORT.EMAIL)}
+                />
+                <Form.Check
+                    type="switch"
+                    label="Sort by user name"
+                    checked={sort === SORT.NAME}
+                    onChange={() => sortFieldToggle(SORT.NAME)}
+                />
+                <Form.Check
+                    type="switch"
+                    label="Sort by user status"
+                    checked={sort === SORT.STATUS}
+                    onChange={() => sortFieldToggle(SORT.STATUS)}
                 />
             </Form>
             <div className='todo-list_list'>

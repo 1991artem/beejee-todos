@@ -12,5 +12,11 @@ export interface ICreateTodos {
 export interface IQuery {
     offset: number;
     limit: number;
-    sort: string;
+    sort: SORT;
+}
+
+export enum SORT {
+    NAME ='username',
+    STATUS = 'isDone',
+    EMAIL = 'email'
 }

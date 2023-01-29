@@ -38,7 +38,7 @@ const FIELD: ParamSchema = {
   in: 'query',
   toLowerCase: true,
   isIn: {
-    options: [['email', 'username']],
+    options: [['email', 'username', 'isdone']],
   },
   trim: true,
   escape: true,

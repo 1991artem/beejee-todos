@@ -1,47 +1,44 @@
-import { IUserLogin, IQuery, ICreateTodos } from './../api/interfaces';
+import { IUserLogin, IQuery, ICreateTodos, SORT } from './../api/interfaces';
 import { loginUser, logOutUser, setTodos, setUserRole } from "./slice";
 import Api from '../api/Api';
 import { ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { AppState, ITodoItem } from './interfaces';
 
-export const init = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch) => {
-        let error = '';
+export const init = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch) => {
         try {
             const token = sessionStorage.getItem('token');
             const role = sessionStorage.getItem('role') === 'admin';
-            if(token) {
+            const res = await Api.getAllTodos({
+                offset: 0,
+                limit: 3,
+                sort: SORT.NAME,
+            });
+            const data = res?.data;
+            if (data) {
+                dispatch(setTodos(data));
+            }
+
+            if (token) {
                 dispatch(loginUser(token));
                 dispatch(setUserRole(role));
-                const res = await Api.getAllTodos({
-                    offset: 0,
-                    limit: 3,
-                    sort: 'username',
-                }, token);
-                const data = res?.data;
                 if (res?.status === 401) {
                     dispatch(logOutUser());
                 }
-                if(data) {
-                    dispatch(setTodos(data));
-                }
             }
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
-export const loginUserAction = (data: IUserLogin): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch) => {
-        let error = '';
+export const loginUserAction = (data: IUserLogin): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch) => {
         try {
             const { name, password } = data;
             const res = await Api.login({
                 name,
                 password
             })
-            console.log(res);
             const token = res?.data?.token;
             const isAdmin = res?.data?.role === 'admin';
             if (token) {
@@ -50,30 +47,26 @@ export const loginUserAction = (data: IUserLogin): ThunkAction<Promise<string>, 
                 dispatch(loginUser(token));
                 dispatch(setUserRole(isAdmin));
             }
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
-export const loginOutUserAction = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch) => {
-        let error = '';
+export const loginOutUserAction = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch) => {
         try {
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('role');
             dispatch(logOutUser());
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
-export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch, getState) => {
-        let error = '';
+export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch, getState) => {
         try {
-            const {username, email, description} = data;
+            const { username, email, description } = data;
             const state = getState();
             const res = await Api.createTodos({
                 username,
@@ -84,36 +77,32 @@ export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<strin
                 dispatch(logOutUser());
             }
             return res?.data?.message;
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
 
-export const getAllTodosAction = (data: IQuery): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch, getState) => {
-        let error = '';
+export const getAllTodosAction = (data: IQuery): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch, getState) => {
         try {
-            const {offset, limit, sort} = data;
-            const state = getState();
+            const { offset, limit, sort } = data;
             const res = await Api.getAllTodos({
                 offset,
                 limit,
                 sort,
-            }, state.app.token);
+            });
             if (res?.status === 401) {
                 dispatch(logOutUser());
             }
             const todos = res?.data;
-            if(todos) {
+            if (todos) {
                 dispatch(setTodos(todos));
             }
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
 const getUpdateTodosArray = (array: ITodoItem[], item: ITodoItem) => {
     const idx = array.findIndex(t => t.id === item.id);
@@ -124,11 +113,10 @@ const getUpdateTodosArray = (array: ITodoItem[], item: ITodoItem) => {
     ]
 }
 
-export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch, getState) => {
-        let error = '';
+export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch, getState) => {
         try {
-            const {app: {todos, token}} = getState();
+            const { app: { todos, token } } = getState();
             const item = todos.todos.find(t => t.id === id);
             if (item) {
                 const newItem = {
@@ -141,7 +129,7 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
                     id,
                     newItem,
                     token,
-                 );
+                );
                 if (res?.status === 401) {
                     dispatch(logOutUser());
                 }
@@ -152,17 +140,15 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
                     }))
                 }
             }
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 
-export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> => 
-   async (dispatch, getState) => {
-        let error = '';
+export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+    async (dispatch, getState) => {
         try {
-            const {app: {todos, token}} = getState();
+            const { app: { todos, token } } = getState();
             const item = todos.todos.find(t => t.id === id);
 
             if (item) {
@@ -176,7 +162,7 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
                     id,
                     newItem,
                     token,
-                 );
+                );
                 if (res?.status === 401) {
                     dispatch(logOutUser());
                 }
@@ -187,9 +173,8 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
                     }))
                 }
             }
-        } catch (e) {
-          error = JSON.stringify(e);
+        } catch (e: any) {
+            return e.message;
         }
-        return error;
-}
+    }
 

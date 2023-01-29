@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
+import useModal from '../../hook/useModal';
 import { checkedTodoAction, updateTodoAction } from '../../redux/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { ITodoItem } from '../../redux/interfaces';
@@ -25,19 +26,27 @@ function Todos({ item }: ITodosCardProps) {
     const emailInputHandler = (value: string) => setEmail(value);
     const descriptionInputHandler = (value: string) => setDescription(value);
 
+    const {modal, showModal}  = useModal();
+
     const toggleCheckBox = () => {
         dispatch(checkedTodoAction(id))
     }
 
-    const editButtonHandler = () => {
+    const editButtonHandler = async () => {
         if(edit && username && email && description){
-            dispatch(updateTodoAction(id, {
+            const message = await dispatch(updateTodoAction(id, {
                 username,
                 email,
                 description
             }))
+            showModal(message);
+            !message && setEdit(false);
         }
-        setEdit(!edit);
+        if (edit && !username && !email && !description) {
+            showModal('Empty field')
+        }
+
+        !edit && setEdit(true);
     }
     const renderButton = () => {
         const text = edit ? 'Save' : 'Edit'
@@ -76,6 +85,8 @@ function Todos({ item }: ITodosCardProps) {
         )
     }
     return (
+        <>
+        {modal}
         <Card
             bg={'Primary'.toLowerCase()}
             text='white'
@@ -93,6 +104,7 @@ function Todos({ item }: ITodosCardProps) {
             {renderItems()}
             {renderButton()}
         </Card>
+        </>
     );
 }
 

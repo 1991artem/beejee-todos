@@ -1,6 +1,6 @@
 import { ITodoItem } from './../redux/interfaces';
 import fetch from './axios';
-import { ICreateTodos, IQuery, IUserLogin } from './interfaces';
+import { ICreateTodos, IQuery, IUserLogin, SORT } from './interfaces';
 
 export default class Api {
 
@@ -11,37 +11,21 @@ export default class Api {
     }
 
     static async login(body: IUserLogin) {
-        return fetch.post('auth/login', body).catch((error) => {
-            console.warn(error);
-          });
+        return fetch.post('auth/login', body);
     }
 
     static async createTodos(body: ICreateTodos, token: string) {
-        return fetch.post('/task/create', body, Api.setToken(token)).catch((error) => {
-            console.warn(error);
-          });
+        return fetch.post('/task/create', body, Api.setToken(token));
     }
 
-    static async getAllTodos(params: IQuery, token: string){
-        const {offset = 0, limit = 3, sort = 'username'} = params;
+    static async getAllTodos(params: IQuery){
+        const {offset = 0, limit = 3, sort = SORT.NAME} = params;
 
         const query = `?pagination[limit]=${limit}&pagination[offset]=${offset}&sort[field]=${sort}`;
-        return fetch.get(`/task/all${query}`, Api.setToken(token)).catch((error) => {
-            console.warn(error);
-          });
+        return fetch.get(`/task/all${query}`);
     }
 
     static async updateTodoById(id: number, body: Partial<ITodoItem>, token: string){
-        return fetch.patch(`/task/${id}`, body, Api.setToken(token)).catch((error) => {
-            console.warn(error);
-          });
-    }
-
-    static async deleteTodoById() {
-
-    }
-
-    static async getTodoById(){
-
+        return fetch.patch(`/task/${id}`, body, Api.setToken(token));
     }
 }
