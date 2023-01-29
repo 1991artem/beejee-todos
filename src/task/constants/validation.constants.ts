@@ -38,7 +38,19 @@ const FIELD: ParamSchema = {
   in: 'query',
   toLowerCase: true,
   isIn: {
-    options: [['email', 'username', 'isdone']],
+    options: [['email', 'username', 'done']],
+  },
+  trim: true,
+  escape: true,
+  optional: true,
+  errorMessage: 'Sort params is invalid',
+};
+
+const TYPE: ParamSchema = {
+  in: 'query',
+  toLowerCase: true,
+  isIn: {
+    options: [['asc', 'desc']],
   },
   trim: true,
   escape: true,
@@ -71,4 +83,4 @@ const DESCRIPTION: ParamSchema = {
   optional: true,
 };
 
-export { ID, LIMIT, FIELD, OFFSET, USER_NAME, DESCRIPTION, EMAIL };
+export { ID, LIMIT, FIELD, OFFSET, USER_NAME, DESCRIPTION, EMAIL, TYPE };

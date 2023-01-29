@@ -24,11 +24,12 @@ function AuthForm() {
 
         if (name && password) {
             const message = await dispatch(loginUserAction({ name, password }));
+            console.log(message);
             showModal(message);
             !message && navigate('/todos')
+        } else {
+            showModal('Empty fields');
         }
-
-        showModal('Empty fields');
     }
 
     return (

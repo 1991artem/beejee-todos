@@ -9,8 +9,10 @@ export interface AppState {
 }
 
 export interface ITodoItem extends ICreateTodos {
-  isDone: boolean,
+  done: boolean,
   id: number;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface ITodosSate {

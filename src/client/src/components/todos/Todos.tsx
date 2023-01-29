@@ -12,7 +12,7 @@ export interface ITodosCardProps {
 }
 
 function Todos({ item }: ITodosCardProps) {
-    const { isDone, id } = item;
+    const { done, id, createdAt, updatedAt } = item;
     const [edit, setEdit] = useState(false);
     const [username, setUserName] = useState(item.username);
     const [email, setEmail] = useState(item.email);
@@ -20,7 +20,7 @@ function Todos({ item }: ITodosCardProps) {
     const isAdmin = useAppSelector((state: RootState) => state.app.isAdmin)
     const dispatch = useAppDispatch()
 
-    const todosStatus = isDone ? 'COMPLETED' : 'IN PROGRESS';
+    const todosStatus = done ? 'COMPLETED' : 'IN PROGRESS';
 
     const nameInputHandler = (value: string) => setUserName(value);
     const emailInputHandler = (value: string) => setEmail(value);
@@ -29,7 +29,7 @@ function Todos({ item }: ITodosCardProps) {
     const {modal, showModal}  = useModal();
 
     const toggleCheckBox = () => {
-        dispatch(checkedTodoAction(id))
+        isAdmin && dispatch(checkedTodoAction(id))
     }
 
     const editButtonHandler = async () => {
@@ -59,6 +59,18 @@ function Todos({ item }: ITodosCardProps) {
         return null;
     }
 
+    const renderUpdateInfo = () => {
+        if(createdAt !== updatedAt) {
+            const timeFormat = new Date(updatedAt).toUTCString()            
+            return (
+            <Card.Text>
+             Updated: {timeFormat}
+            </Card.Text>
+            )
+        }
+        return null;
+    }
+
     const renderItems = () => {
         if(edit) {
             return (
@@ -66,7 +78,7 @@ function Todos({ item }: ITodosCardProps) {
                 <Card.Header><Form.Control type='email' value={email} onChange={(event) => emailInputHandler(event.target.value)}/></Card.Header>
                 <Card.Header><Form.Control value={username} onChange={(event) => nameInputHandler(event.target.value)}/></Card.Header>
                 <Card.Body>
-                <Form.Control value={description} onChange={(event) => descriptionInputHandler(event.target.value)}/>
+                    <Form.Control value={description} onChange={(event) => descriptionInputHandler(event.target.value)}/>
                 </Card.Body>
             </>
             )
@@ -80,6 +92,7 @@ function Todos({ item }: ITodosCardProps) {
                     <Card.Text>
                         {description}
                     </Card.Text>
+                    {renderUpdateInfo()}
                 </Card.Body>
             </>
         )
@@ -97,7 +110,7 @@ function Todos({ item }: ITodosCardProps) {
                     inline
                     type='checkbox'
                     label={todosStatus}
-                    checked={isDone}
+                    checked={done}
                     onChange={toggleCheckBox}
                 />
             </Form>

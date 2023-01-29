@@ -4,6 +4,7 @@ export type QueryParams = {
   limit: number | undefined;
   offset: number | undefined;
   field: string | undefined;
+  type: string | undefined;
 };
 
 export type GetAllTaskResponse = {

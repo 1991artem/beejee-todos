@@ -13,6 +13,7 @@ const getAllTasks = checkSchema({
   'pagination.[limit]': VALIDATION_SCHEMAS.LIMIT,
   'pagination.[offset]': VALIDATION_SCHEMAS.OFFSET,
   'sort.[field]': VALIDATION_SCHEMAS.FIELD,
+  'sort.[type]': VALIDATION_SCHEMAS.TYPE,
 });
 
 export {

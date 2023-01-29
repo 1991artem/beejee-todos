@@ -32,7 +32,7 @@ function Input() {
         if (username && email && description) {
           const message = await dispatch(createTodosAction({username, email, description}))
           showModal(message);
-          resetInputs();
+          !message && resetInputs();
         } else {
           showModal('Empty fields');
         }

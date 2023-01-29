@@ -13,10 +13,11 @@ export interface IQuery {
     offset: number;
     limit: number;
     sort: SORT;
+    type: string;
 }
 
 export enum SORT {
     NAME ='username',
-    STATUS = 'isDone',
+    STATUS = 'done',
     EMAIL = 'email'
 }

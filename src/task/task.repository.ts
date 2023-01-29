@@ -20,11 +20,11 @@ export class TaskRepository {
   }
 
   static async getAllTasks(params: QueryParams): Promise<[Task[], number]> {
-    const { limit, offset, field } = params;
+    const { limit, offset, field, type } = params;
     const tasks = await this._tasksRepository.findAndCount({
       order: field ?
         {
-          [field]: 'desc',
+          [field]: type?.toLowerCase(),
         }
         : undefined,
       take: limit,

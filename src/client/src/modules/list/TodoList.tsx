@@ -11,6 +11,7 @@ import './index.scss';
 function TodoList() {
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState(SORT.NAME)
+    const [type, setType] = useState("DESC")
     const data = useAppSelector((state: RootState) => state.app.todos);
     const dispatch = useAppDispatch();
 
@@ -26,14 +27,19 @@ function TodoList() {
             offset: params.offset,
             limit: params.limit,
             sort: sort,
+            type: type,
         }))
-    }, [page, sort, data])
+    }, [page, sort, type])
 
     const { todos, amount } = data;
 
     const pagesCount = Math.ceil(amount / 3);
 
     const sortFieldToggle = (value: SORT) => setSort(value);
+    const sortTypeToggle = () => {
+        const sortType = type !== 'DESC' ? 'DESC' : 'ASC';
+        setType(sortType)
+    };
 
     const renderPagination = () => {
         let items = [];
@@ -73,6 +79,11 @@ function TodoList() {
                     label="Sort by user status"
                     checked={sort === SORT.STATUS}
                     onChange={() => sortFieldToggle(SORT.STATUS)}
+                />
+                                <Form.Check
+                    type="switch"
+                    label={type}
+                    onChange={sortTypeToggle}
                 />
             </Form>
             <div className='todo-list_list'>

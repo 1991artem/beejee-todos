@@ -28,7 +28,7 @@ export class Task extends BaseEntity {
   @Column({
     default: false,
   })
-    isdone: boolean;
+    done: boolean;
 
   @CreateDateColumn()
     createdAt: Date;

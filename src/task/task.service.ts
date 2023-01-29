@@ -17,6 +17,7 @@ export class TaskService {
       limit: pagination?.limit ? Number(pagination?.limit) : undefined,
       offset: pagination?.offset ? Number(pagination?.offset) : undefined,
       field: sort?.field ? sort?.field.toLowerCase() : undefined,
+      type: sort?.type ? sort?.type.toUpperCase() : undefined,
     };
     const [tasks, amount] = await TaskRepository.getAllTasks( params);
 

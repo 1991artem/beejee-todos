@@ -4,15 +4,26 @@ import Api from '../api/Api';
 import { ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { AppState, ITodoItem } from './interfaces';
 
+const getErrorMessage = (e: any) => {
+    if(e?.response?.data) {
+        if (e?.response?.data.errors) {
+            return e.response.data?.errors?.map((err: any) => err.msg).join(' ');
+        }
+        return e?.response?.data.message;
+    }
+    return e.message;
+}
+
 export const init = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
     async (dispatch) => {
         try {
-            const token = sessionStorage.getItem('token');
-            const role = sessionStorage.getItem('role') === 'admin';
+            const token = localStorage.getItem('token');
+            const role = localStorage.getItem('role') === 'admin';
             const res = await Api.getAllTodos({
                 offset: 0,
                 limit: 3,
                 sort: SORT.NAME,
+                type: 'DESC'
             });
             const data = res?.data;
             if (data) {
@@ -22,12 +33,9 @@ export const init = (): ThunkAction<Promise<string>, { app: AppState; }, undefin
             if (token) {
                 dispatch(loginUser(token));
                 dispatch(setUserRole(role));
-                if (res?.status === 401) {
-                    dispatch(logOutUser());
-                }
             }
         } catch (e: any) {
-            return e.message;
+            return getErrorMessage(e);
         }
     }
 
@@ -42,24 +50,24 @@ export const loginUserAction = (data: IUserLogin): ThunkAction<Promise<string>, 
             const token = res?.data?.token;
             const isAdmin = res?.data?.role === 'admin';
             if (token) {
-                sessionStorage.setItem('token', token);
-                sessionStorage.setItem('role', res?.data?.role);
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', res?.data?.role);
                 dispatch(loginUser(token));
                 dispatch(setUserRole(isAdmin));
             }
         } catch (e: any) {
-            return e.message;
+            return getErrorMessage(e);
         }
     }
 
 export const loginOutUserAction = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
     async (dispatch) => {
         try {
-            sessionStorage.removeItem('token');
-            sessionStorage.removeItem('role');
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
             dispatch(logOutUser());
         } catch (e: any) {
-            return e.message;
+            return getErrorMessage(e);
         }
     }
 
@@ -73,12 +81,12 @@ export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<strin
                 email,
                 description,
             }, state.app.token);
-            if (res?.status === 401) {
-                dispatch(logOutUser());
-            }
             return res?.data?.message;
         } catch (e: any) {
-            return e.message;
+            if (e.response?.status === 401) {
+                dispatch(loginOutUserAction());
+            }
+            return getErrorMessage(e);
         }
     }
 
@@ -86,21 +94,19 @@ export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<strin
 export const getAllTodosAction = (data: IQuery): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
     async (dispatch, getState) => {
         try {
-            const { offset, limit, sort } = data;
+            const { offset, limit, sort, type } = data;
             const res = await Api.getAllTodos({
                 offset,
                 limit,
                 sort,
+                type
             });
-            if (res?.status === 401) {
-                dispatch(logOutUser());
-            }
             const todos = res?.data;
             if (todos) {
                 dispatch(setTodos(todos));
             }
         } catch (e: any) {
-            return e.message;
+            return getErrorMessage(e);
         }
     }
 
@@ -118,10 +124,11 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
         try {
             const { app: { todos, token } } = getState();
             const item = todos.todos.find(t => t.id === id);
+            console.log(item)
             if (item) {
                 const newItem = {
                     ...item,
-                    isDone: !item.isDone,
+                    done: !item.done,
                 }
                 const newTodosArray = getUpdateTodosArray(todos.todos, newItem);
 
@@ -130,9 +137,6 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
                     newItem,
                     token,
                 );
-                if (res?.status === 401) {
-                    dispatch(logOutUser());
-                }
                 if (res?.status === 200) {
                     dispatch(setTodos({
                         todos: newTodosArray,
@@ -141,7 +145,10 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
                 }
             }
         } catch (e: any) {
-            return e.message;
+            if (e.response?.status === 401) {
+                dispatch(loginOutUserAction());
+            }
+            return getErrorMessage(e);
         }
     }
 
@@ -155,6 +162,7 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
                 const newItem = {
                     ...item,
                     ...body,
+                    updatedAt: new Date().toISOString(),
                 }
                 const newTodosArray = getUpdateTodosArray(todos.todos, newItem);
 
@@ -163,9 +171,6 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
                     newItem,
                     token,
                 );
-                if (res?.status === 401) {
-                    dispatch(logOutUser());
-                }
                 if (res?.status === 200) {
                     dispatch(setTodos({
                         todos: newTodosArray,
@@ -174,7 +179,10 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
                 }
             }
         } catch (e: any) {
-            return e.message;
+            if (e.response?.status === 401) {
+                dispatch(loginOutUserAction());
+            }
+            return getErrorMessage(e);
         }
     }
 

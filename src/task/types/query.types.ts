@@ -5,5 +5,6 @@ export type GetAllQueryParams = {
   },
   sort?: {
     field: string;
+    type: string;
   },
 };

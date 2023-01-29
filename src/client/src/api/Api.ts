@@ -19,9 +19,9 @@ export default class Api {
     }
 
     static async getAllTodos(params: IQuery){
-        const {offset = 0, limit = 3, sort = SORT.NAME} = params;
+        const {offset = 0, limit = 3, sort = SORT.NAME, type = 'DESC'} = params;
 
-        const query = `?pagination[limit]=${limit}&pagination[offset]=${offset}&sort[field]=${sort}`;
+        const query = `?pagination[limit]=${limit}&pagination[offset]=${offset}&sort[field]=${sort}&sort[type]=${type}`;
         return fetch.get(`/task/all${query}`);
     }
 
