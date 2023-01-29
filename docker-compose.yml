@@ -2,13 +2,21 @@ volumes:
   data:
 
 services:
+  server:
+    image: 8f708462d237aef83681a8b01a720d927348c4eed28c3cbd5df6369a0e4b191f
+    ports:
+      - "4500:4500"
+    links:
+        - postgres
+  client:
+    image: 1b21abf0402de979b5f2225d23133995147eec1b49c9436d27a36658203db445
+    ports:
+      - "3000:3000"
   postgres:
-    image: postgres:latest
+    image: 2ce4f03f420bf05ff5d798bb0fd6900278935328879cf598c9ee815322853b94
     environment:
       - POSTGRES_PASSWORD=postgrespw
     ports:
-      - 4200:4200
+      - 5432:5432
     volumes:
       - data:/var/lib/postgresql
-  myapp:
-    image: db1afda3d125bd527719b59c746727ad78b516ae01ce5aa588989181520fefc8
