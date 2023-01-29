@@ -11,7 +11,7 @@ import './index.scss';
 function TodoList() {
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState(SORT.NAME)
-    const [type, setType] = useState("DESC")
+    const [type, setType] = useState("ASC")
     const data = useAppSelector((state: RootState) => state.app.todos);
     const dispatch = useAppDispatch();
 

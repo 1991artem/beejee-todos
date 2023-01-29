@@ -32,7 +32,7 @@ function Input() {
         if (username && email && description) {
           const message = await dispatch(createTodosAction({username, email, description}))
           showModal(message);
-          !message && resetInputs();
+          message === 'Task has been created' && resetInputs();
         } else {
           showModal('Empty fields');
         }
