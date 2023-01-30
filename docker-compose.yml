@@ -3,19 +3,20 @@ volumes:
 
 services:
   server:
-    image: 8f708462d237aef83681a8b01a720d927348c4eed28c3cbd5df6369a0e4b191f
+    image: 83f988e2b7bc5b66dc5feaa2d93424290872fcbec9037c830a85afdc18e8af1e
     ports:
       - "4500:4500"
     links:
         - postgres
   client:
-    image: 1b21abf0402de979b5f2225d23133995147eec1b49c9436d27a36658203db445
+    image: caba5bcce2d6587163d7373e61556a9bb68b29cb4b1925547655649edda3426d
     ports:
       - "3000:3000"
   postgres:
     image: 2ce4f03f420bf05ff5d798bb0fd6900278935328879cf598c9ee815322853b94
     environment:
       - POSTGRES_PASSWORD=postgrespw
+      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5432:5432
     volumes:

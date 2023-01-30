@@ -5,18 +5,18 @@ import { User } from 'user/entity/user.entity';
 
 dotenv.config();
 
-const user = process.env.DB_USER;
-const host = process.env.DB_HOST || 'localhost';
-const database = process.env.DB_NAME;
-const password = process.env.DB_PASSWORD;
+const user = 'postgres';
+const host = 'todos-app-db.internal';
+const database = 'postgres';
+const password = 'z63Kevnn9yXFsJl';
 const port = process.env.DB_PORT || 5432;
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = '1991';
 if (!JWT_SECRET) {
   throw new Error('JWT secret not specified');
 }
 
-const TOKEN_LIFETIME = process.env.TOKEN_LIFETIME;
+const TOKEN_LIFETIME = '1h';
 if (!TOKEN_LIFETIME) {
   throw new Error('TOKEN_LIFETIME not set');
 }
@@ -45,7 +45,7 @@ const DB: DataSourceOptions = {
 
 export const config = {
   DEV: {
-    PORT: 4500,
+    PORT: 8080,
     DB,
     JWT_SECRET,
     TOKEN_LIFETIME,

@@ -23,7 +23,7 @@ const init = async (): Promise<void> => {
   try {
     const PORT: number = config.DEV.PORT;
     await AppDataSource.initialize();
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`---listening port ${PORT}---`);
     });
     console.info('Successfully connected');
