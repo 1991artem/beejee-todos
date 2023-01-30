@@ -25,11 +25,11 @@ function AppRouter() {
 
     return ( 
         <Routes>
-            <Route path="/" element={<Navigate to="/todos" />} />
+            <Route path="/" element={<TodoListPage />} />
             <Route path="/todos" element={<TodoListPage />} />
             <Route path="/auth" element={<AuthPage />} />
             {error && <Route path="/error" element={<ErrorPage error={error}/>} />}
-            <Route path="*" element={<Navigate to="/todos" />} />
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
      );
 }

@@ -22,9 +22,10 @@ export class TaskService {
     const [tasks, amount] = await TaskRepository.getAllTasks( params);
 
     if (!tasks.length) {
-      throw new AppError(STATUS_CODE.NOT_FOUND,
-        'Tasks not found',
-      );
+      return {
+        amount: 0,
+        todos: [],
+      };
     }
     const allTaskResponse: GetAllTaskResponse = {
       amount: amount,

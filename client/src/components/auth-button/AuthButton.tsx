@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { loginOutUserAction } from "../../redux/actions";
+import { logOutUserAction } from "../../redux/actions";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 
@@ -10,7 +10,7 @@ function AuthButton() {
     const navigate = useNavigate();
 
     const logOut = () => {
-        dispatch(loginOutUserAction())
+        dispatch(logOutUserAction())
     }
 
     const moveToAuthPage = () => {

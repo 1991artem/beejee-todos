@@ -9,7 +9,7 @@ const user = 'postgres';
 const host = 'todos-app-db.internal';
 const database = 'postgres';
 const password = 'z63Kevnn9yXFsJl';
-const port = process.env.DB_PORT || 5432;
+const port = '5432';
 
 const JWT_SECRET = '1991';
 if (!JWT_SECRET) {

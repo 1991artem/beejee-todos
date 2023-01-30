@@ -1,6 +1,6 @@
-# fly.toml file generated for todos-app on 2023-01-30T22:20:40+03:00
+# fly.toml file generated for beejee-todos-server on 2023-01-31T00:58:13+03:00
 
-app = "todos-app"
+app = "beejee-todos-server"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []

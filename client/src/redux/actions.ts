@@ -60,7 +60,7 @@ export const loginUserAction = (data: IUserLogin): ThunkAction<Promise<string>, 
         }
     }
 
-export const loginOutUserAction = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
+export const logOutUserAction = (): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
     async (dispatch) => {
         try {
             localStorage.removeItem('token');
@@ -84,7 +84,7 @@ export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<strin
             return res?.data?.message;
         } catch (e: any) {
             if (e.response?.status === 401) {
-                dispatch(loginOutUserAction());
+                dispatch(logOutUserAction());
             }
             return getErrorMessage(e);
         }
@@ -92,7 +92,7 @@ export const createTodosAction = (data: ICreateTodos): ThunkAction<Promise<strin
 
 
 export const getAllTodosAction = (data: IQuery): ThunkAction<Promise<string>, { app: AppState; }, undefined, AnyAction> =>
-    async (dispatch, getState) => {
+    async (dispatch) => {
         try {
             const { offset, limit, sort, type } = data;
             const res = await Api.getAllTodos({
@@ -146,7 +146,7 @@ export const checkedTodoAction = (id: number): ThunkAction<Promise<string>, { ap
             }
         } catch (e: any) {
             if (e.response?.status === 401) {
-                dispatch(loginOutUserAction());
+                dispatch(logOutUserAction());
             }
             return getErrorMessage(e);
         }
@@ -180,7 +180,7 @@ export const updateTodoAction = (id: number, body: Partial<ITodoItem>): ThunkAct
             }
         } catch (e: any) {
             if (e.response?.status === 401) {
-                dispatch(loginOutUserAction());
+                dispatch(logOutUserAction());
             }
             return getErrorMessage(e);
         }

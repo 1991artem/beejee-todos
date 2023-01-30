@@ -59,6 +59,22 @@ function TodoList() {
     if (!todos) {
         return null;
     }
+
+    const renderList = () => {
+        if(!amount) {
+            return (
+                <div className='todo-list_list center'>
+                    <h4>Empty list. Add first task &#128526;</h4>
+                </div>
+            )
+        }
+        return (
+            <div className='todo-list_list'>
+                {todos.map((item: ITodoItem) => <Todos item={item} key={item.id} />)}
+            </div>
+        )
+    }
+
     return (
         <section className="todo-list">
             <Form>
@@ -86,9 +102,7 @@ function TodoList() {
                     onChange={sortTypeToggle}
                 />
             </Form>
-            <div className='todo-list_list'>
-                {todos.map((item: ITodoItem) => <Todos item={item} key={item.id} />)}
-            </div>
+            {renderList()}
             <Pagination>{renderPagination()}</Pagination>
         </section>
 

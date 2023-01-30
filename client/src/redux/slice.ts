@@ -31,7 +31,6 @@ export const appSlice = createSlice({
       state.token = initialState.token;
       state.isLoading = initialState.isLoading;
       state.isLogin = initialState.isLogin;
-      state.todos = initialState.todos;
     },
 
     setTodos: (state, action: PayloadAction<ITodosSate>) => {
