@@ -5,11 +5,8 @@
 
 # Build dependencies
 node_modules
-coverage
 
 # Files not required for production
 .editorconfig
 Dockerfile
 README.md
-tslint.json
-nodemon.json
