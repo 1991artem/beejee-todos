@@ -63,7 +63,7 @@
         "import/resolver": {
             "typescript": {},
             "node": {
-                "paths": ["src"],
+                "paths": ["node_modules/@types", "node_modules", "src/"],
                 "extensions": [".ts"]
               }
         }

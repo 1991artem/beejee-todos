@@ -25,13 +25,11 @@
     ],
     "paths": {
       "@auth": ["auth"],
-      "@group": ["group"],
       "@task": ["task"],
       "@user": ["user"],
       "@errors": ["errors"],
       "@middleware": ["middleware"],
       "@constants": ["constants"],
-      "@ws": ["ws"],
     }
   },
   "exclude": ["node_modules"],

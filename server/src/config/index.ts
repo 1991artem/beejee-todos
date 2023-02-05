@@ -5,11 +5,17 @@ import { User } from 'user/entity/user.entity';
 
 dotenv.config();
 
+// const user = 'postgres';
+// const host = 'todos-app-db.internal';
+// const database = 'postgres';
+// const password = 'z63Kevnn9yXFsJl';
+// const port = '5432';
+
 const user = 'postgres';
-const host = 'todos-app-db.internal';
+const host = 'localhost';
 const database = 'postgres';
-const password = 'z63Kevnn9yXFsJl';
-const port = '5432';
+const password = 'postgrespw';
+const port = '32768';
 
 const JWT_SECRET = '1991';
 if (!JWT_SECRET) {

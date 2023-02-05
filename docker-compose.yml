@@ -13,7 +13,7 @@ services:
     ports:
       - "3000:3000"
   postgres:
-    image: 2ce4f03f420bf05ff5d798bb0fd6900278935328879cf598c9ee815322853b94
+    image: postgres:latest
     environment:
       - POSTGRES_PASSWORD=postgrespw
       - POSTGRES_HOST_AUTH_METHOD=trust

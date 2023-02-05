@@ -1,4 +1,4 @@
-import { UserAuthBody } from 'auth/types/body.types';
+import { UserAuthBody } from '@auth';
 import { AppDataSource } from '../data-source';
 import { User } from './entity/user.entity';
 

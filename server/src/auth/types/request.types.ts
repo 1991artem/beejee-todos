@@ -1,4 +1,6 @@
 import { Request } from 'express';
-import { UserAuthBody } from './body.types';
+import { CreateUserBody, UserAuthBody } from './body.types';
+
+export type SignUpRequest = Request<unknown, unknown, CreateUserBody>;
 
 export type LoginRequest = Request<unknown, unknown, UserAuthBody>;
