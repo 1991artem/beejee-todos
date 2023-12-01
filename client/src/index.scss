@@ -1,0 +1,14 @@
+@import "~bootstrap/scss/bootstrap";
+
+#root {
+    max-width: 1200px;
+    min-width: 500px;
+
+    height: 100vh;
+
+    margin: 0 auto;
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+}

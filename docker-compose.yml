@@ -1,0 +1,23 @@
+volumes:
+  data:
+
+services:
+  server:
+    image: 83f988e2b7bc5b66dc5feaa2d93424290872fcbec9037c830a85afdc18e8af1e
+    ports:
+      - "4500:4500"
+    links:
+        - postgres
+  client:
+    image: caba5bcce2d6587163d7373e61556a9bb68b29cb4b1925547655649edda3426d
+    ports:
+      - "3000:3000"
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql
